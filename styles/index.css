@@ -1,0 +1,36 @@
+.main-content {
+	margin-top: 65px;
+	margin-left:15px;
+	margin-right:15px;
+}
+
+.main-content-popup {
+	margin-left: 15px;
+	margin-right: 15px;
+}
+
+.welcome-to-title {
+	font-weight: 300;
+    font-size: 32px;
+    line-height: 1.1;
+}
+
+.labelForm {
+	font-weight: 400;
+    font-size: 17px !important;
+    line-height: 1.1;
+}
+
+.defBox {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+th {
+	background-color: #0072c6;
+    color: white;
+}
+
+.txtAddress {
+	width: 552px !important; margin-top: 5px; min-height: 80px !important; line-height: 20px !important;
+}
