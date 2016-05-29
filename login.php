@@ -44,73 +44,32 @@ if(isset($_POST['user_login']) && isset($_POST['user_password']) ){
 
     <link rel='shortcut icon' type='image/x-icon' href='../favicon.ico' />
 
-    <title>CIA</title>
+    <title>ECLearning</title>
 
     <link href="build/css/metro.css" rel="stylesheet">
     <link href="build/css/metro-icons.css" rel="stylesheet">
     <link href="build/css/metro-responsive.css" rel="stylesheet">
+    <link href="styles/main.css" rel="stylesheet">
+    <link href="styles/login.css" rel="stylesheet">
 
     <script src="build/js/jquery-1.12.3.js"></script>
     <script src="build/js/metro.js"></script>
- 
-    <style>
-        .login-form {
-            width: 25rem;
-            height: 18.75rem;
-            position: fixed;
-            top: 50%;
-            margin-top: -9.375rem;
-            left: 50%;
-            margin-left: -12.5rem;
-            background-color: #ffffff;
-            opacity: 0;
-            -webkit-transform: scale(.8);
-            transform: scale(.8);
-        }
+    
+     <style>
+      
     </style>
-
-    <script>
-        $(function(){
-            var form = $(".login-form");
-
-            form.css({
-                opacity: 1,
-                "-webkit-transform": "scale(1)",
-                "transform": "scale(1)",
-                "-webkit-transition": ".5s",
-                "transition": ".5s"
-            });
-
-            $(".btnCancel").click(function() {
-                $("#user_login").val("");
-                $("#user_password").val("");
-            });
-        });
-    </script>
 </head>
-<body class="bg-lightBlue">
-    <div class="login-form padding20 block-shadow">
-        <form action="#" method="post">
-            <h1 class="text-light">Login</h1>
-            <hr class="thin"/>
-            <br />
-            <div class="input-control text full-size" data-role="input">
-                <input type="text" name="user_login" id="user_login" placeholder="Username" required="">
-                <button class="button helper-button clear"><span class="mif-cross"></span></button>
-            </div>
-            <br />
-            <br />
-            <div class="input-control password full-size" data-role="input">
-                <input type="password" name="user_password" id="user_password" placeholder="Password" required="">
-                <button class="button helper-button reveal"><span class="mif-looks"></span></button>
-            </div>
-            <br />
-            <br />
+<body style="margin: 0 0 0 0">
+    <form action="#" method="post">
+        <div class="login-form">
+            <div><input type="text" name="user_login" id="user_login" placeholder="Username" class="textBox" required=""></div>
+            <div><input type="password" name="user_password" id="user_password" placeholder="Password" class="textBox" required=""></div>
             <div class="form-actions">
-                <button type="submit" class="button primary">Login</button>
-                <button type="button" class="btnCancel button link">Cancel</button>
+                <button type="button" class="btnForgotPassword button link">Forgot your password?</button>
+                <button type="submit" class="button primary">Sign In</button>
             </div>
-        </form>
+        </div>
     </div>
+    </form>
 </body>
 </html>
