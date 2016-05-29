@@ -35,7 +35,7 @@
    if($usertype=='student') {
        $displaymenu .= "
                    <li><a href='#'>Review/Download Materials</a></li>    
-                   <li><a href='#'>Take Exam / Quiz</a></li>";    
+                   <li><a href='selectsession.php'>Take Exam / Quiz</a></li>";    
    }
    $displaymenu .= "<li><a href='#'>Help, Info and Support</a></li>";
    ?>
@@ -49,12 +49,13 @@
       <meta name="keywords" content="">
       <meta name="author" content="Team PELA">
       <link rel='shortcut icon' type='image/x-icon' href='../favicon.ico' />
-      <title>CIA</title>
+      <title>ECLearning</title>
       
       <!--CSS------------------------------------------>
       <link href="build/css/metro.css" rel="stylesheet">
       <link href="build/css/metro-icons.css" rel="stylesheet">
       <link href="build/css/metro-responsive.css" rel="stylesheet">
+       <link href="styles/main.css" rel="stylesheet">
       <link href="styles/index.css" rel="stylesheet">
 
       <!--JAVASCRIPTS------------------------------------------>
@@ -86,7 +87,7 @@
          }
       </style>
    </head>
-   <body class="bg-white">
+   <body>
       <div class="app-bar fixed-top darcula" data-role="appbar">
          <a class="app-bar-element branding">CIA</a>
          <span class="app-bar-divider"></span>
@@ -106,51 +107,6 @@
                </ul>
             </div>
          </div>
-      </div>
-      <div class="container-fluid">
-      <div class="main-content clear-float">
-          <div class="tile-area no-padding">
-          <h1 class="welcome-to-title">Welcome to <b>CIA</b></h1>
-            <div class="tile-group no-margin no-padding" style="width: 100%">
-                 <div class="tile-large ol-transparent" data-role="tile">
-                        <div class="tile-content">
-                            <div class="carousel" data-role="carousel" data-height="100%" data-width="100%" data-controls="false">
-                                <div class="slide">
-                                    <img src="images/1.jpg" data-role="fitImage" data-format="fill">
-                                </div>
-                                <div class="slide">
-                                    <img src="images/2.jpg"  data-role="fitImage" data-format="fill">
-                                </div>
-                                <div class="slide">
-                                    <img src="images/3.jpg"  data-role="fitImage" data-format="fill">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                     <div class="tile-big tile-wide-y bg-white" data-role="tile">
-                        <div class="tile-content">
-                            <div class="panel" style="height: 100%">
-                                <div class="heading bg-lightBlue fg-white"><span class="title text-light">news</span></div>
-                                <div class="content fg-dark clear-float" style="height: 100%">
-                                    <img src="images/4.jpg" class="place-left margin10" style="height: 130px">
-                                    <h2 class="text-light">CIA - Internal Auditing Youth Summit</h2>
-                                    <p style="padding:10px;">May is considered as the International Internal Audit Awareness Month. The Institute of Internal Auditors FEU Student Chapter and the National Federation of Junior Philippine Institute of Accountants - National Capital Region joins this celebration through the Internal Auditing Youth Summit!
-                                    <br>
-                                    <br>
-                                    Happy International Internal Audit Awareness Month!!
-                                    <br>
-                                    ‪#‎IIAAwarenessMonth‬ 
-                                    ‪#‎DiscoverInternalAuditing‬
-                                    ‪#‎IAYS2016‬</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-      </div>
-            </div>
-
-          </div>
-
       </div>
    </body>
 </html>

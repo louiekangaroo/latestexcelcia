@@ -66,7 +66,7 @@ if(isset($_POST['user_login']) && isset($_POST['user_password']) ){
             <div><input type="password" name="user_password" id="user_password" placeholder="Password" class="textBox" required=""></div>
             <div class="form-actions">
                 <button type="button" class="btnForgotPassword button link">Forgot your password?</button>
-                <button type="submit" class="button primary">Sign In</button>
+                <button type="submit" class="button primary btn">Sign In</button>
             </div>
         </div>
     </div>

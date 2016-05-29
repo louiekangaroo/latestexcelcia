@@ -35,12 +35,12 @@
    if($usertype=='student') {
        $displaymenu .= "
                    <li><a href='#'>Review/Download Materials</a></li>    
-                   <li><a href='#'>Take Exam / Quiz</a></li>";    
+                   <li><a href='selectsession.php'>Take Exam / Quiz</a></li>";    
    }
    $displaymenu .= "<li><a href='#'>Help, Info and Support</a></li>";
    ?>
 <!DOCTYPE html>
-<html ng-app="myUser">
+<html>
    <head>
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -49,19 +49,19 @@
       <meta name="keywords" content="">
       <meta name="author" content="Team PELA">
       <link rel='shortcut icon' type='image/x-icon' href='../favicon.ico' />
-      <title>CIA</title>
+      <title>ECLearning</title>
       
       <!--CSS------------------------------------------>
       <link href="build/css/metro.css" rel="stylesheet">
       <link href="build/css/metro-icons.css" rel="stylesheet">
       <link href="build/css/metro-responsive.css" rel="stylesheet">
+       <link href="styles/main.css" rel="stylesheet">
       <link href="styles/index.css" rel="stylesheet">
 
       <!--JAVASCRIPTS------------------------------------------>
       <script src="build/js/jquery-1.12.3.js"></script>
-      <script src="js/angular.min.js"></script>
-      <script src="js/usermanagement.js"></script>
       <script src="build/js/metro.js"></script>
+      <script src="js/globalscript.js"></script>
       <style>
          html, body {
          height: 100%;
@@ -87,8 +87,13 @@
          }
          }
       </style>
+       <script>
+        $("#btnStartSession").click(function() {
+           alert('meh'); 
+        });
+       </script>
    </head>
-   <body class="bg-white"  ng-controller="myUserCtrl">
+   <body>
       <div class="app-bar fixed-top darcula" data-role="appbar">
          <a class="app-bar-element branding">CIA</a>
          <span class="app-bar-divider"></span>
@@ -104,49 +109,29 @@
                <h2 class="text-light">Quick settings</h2>
                <ul class="unstyled-list fg-dark">
                   <li><a href="" class="fg-white1 fg-hover-yellow">Profile</a></li>
-                  <li><a href="logout.php" class="fg-white3 fg-hover-yellow">Logout</a></li>
+                  <li><a href="controllers/logout.php" class="fg-white3 fg-hover-yellow">Logout</a></li>
                </ul>
             </div>
          </div>
       </div>
-
-      <div class="container-fluid" ng-model="users">
-      <div class="main-content clear-float">
-      <h1 class="welcome-to-title">User Management</h1>
-      <hr class="thin bg-grayLighter">
-      <button class="button primary btnNew"><span class="mif-plus"></span> New</button>
-      <button class="button btnEdit"><span class="mif-pencil"></span> Edit</button>
-      <button class="button primary btnDelete"><span class="mif-cross"></span> Delete</button>
-      <hr class="thin bg-grayLighter">
-          <table class="table striped border bordered">
-            <th></th>
-            <th>First Name</th>
-            <th>Middle Name</th>
-            <th>Last Name</th>
-            <th>Address</th>
-            <th>Contact No.</th>
-            <th>Email Add</th>
-            <th>Username</th>
-            <th>Password</th>
-            <th>User Type</th>
-            <th>Is Active</th>
-            <tbody>
-            <tr ng-repeat="x in users">
-            <td id="{{ x.id }}"><input type="checkbox"></td>
-            <td> {{ x.fname }} </td>
-            <td> {{ x.mname }} </td>
-            <td> {{ x.lname }} </td>
-            <td> {{ x.address }} </td>
-            <td> {{ x.contactno }} </td>
-            <td> {{ x.emailadd }} </td>
-            <td> {{ x.username }} </td>
-            <td> {{ x.password }} </td>
-            <td> {{ x.usertype }} </td>
-            <td><input type="checkbox" disabled="true" checked="{{ x.status }}"></td>
-            </tr>
-             </tbody>
-          </table>
-      </div>
-      </div>
+      <div class="container">
+          <div class="main-content clear-float">
+            <h1 class="welcome-to-title">Select your session</h1>
+            <hr class="thin bg-grayLighter">
+            <label class="input-control radio">
+                <input type="radio" name="session" checked>
+                <span class="check"></span>
+                <span class="caption">Study Session</span>
+                </label>
+              <br>
+              <label class="input-control radio">
+                <input type="radio" name="session">
+                <span class="check"></span>
+                <span class="caption">Test Session</span>
+                </label>
+              <br><br>
+              <button id="btnStartSession" class="button primary btn">Start Session</button>
+          </div>
+       </div>
    </body>
 </html>

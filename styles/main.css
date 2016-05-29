@@ -16,3 +16,7 @@ body {
 .labels {
     height: 55px !important;   
 }
+
+.btn {
+    border-radius: 3px;
+}
