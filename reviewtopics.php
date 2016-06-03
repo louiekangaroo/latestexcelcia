@@ -1,3 +1,11 @@
+<?PHP 
+   session_start();
+   include_once("./udf/udf.php");
+   include_once("menuinterface.php");
+
+   //die $_REQUEST['session'];
+
+?>
 <!DOCTYPE html>
 <html>
    <head>
@@ -49,20 +57,19 @@
          <a class="app-bar-element branding">CIA</a>
          <span class="app-bar-divider"></span>
          <ul class="app-bar-menu">
-            <!--<li><a href="index.php">Home</a></li>-->
+            <li><a href="index.php">Home</a></li>
+            <!-- start of dynamic menu -->
+            <?PHP echo $displaymenu; ?>
+            <!-- end of dynamic menu -->
          </ul>
       </div>
       <div class="container">
          <div class="main-content clear-float">
-            <h1 class="welcome-to-title">Session Type</h1>
+            <h1 class="welcome-to-title">Main Topic(s)</h1>
             <hr class="thin bg-grayLighter">
+            <!-- -->
             <?PHP 
-               session_start();
-               include_once("./udf/udf.php");
-               if(strlen(trim($_SESSION['usertype']))<1 ){
-                   siteRedirectWithAlert("You Must Login first!","login.php");
-               }
-               
+              
                 // Create connection
                require("controllers/connection.php");
                global $con;
@@ -71,8 +78,9 @@
                 die("Connection failed: " . mysqli_connect_error());
                }
                
-               $sql = "CALL getReviewtopic()";
-               
+               // $sql = "CALL getReviewtopic()";
+               $sql = "select * from studyunits where isparent=1;";
+
                $result = mysqli_query($con, $sql);
                
                echo '<form name="revform" method="post" action="studyunits.php"><div class="coolTable" ><table><tr><td></td></tr>';
@@ -81,9 +89,11 @@
                
                echo '<tr>';
                echo '<label class="input-control radio" >';
-                echo '<input type="radio" name="rdtopic" value="'.$row['id'].'" id="rdio">';
+                //echo '<input type="radio" name="rdtopic" value="'.$row['id'].'" id="rdio">';
+               echo '<input type="radio" name="rdtopic" value="'.$row['topicid'].'" id="rdio">';
                 echo '<span class="check"></span>';
-                echo '<span class="caption">'.$row["topicname"].'</span>';
+                //echo '<span class="caption">'.$row["topicname"].'</span>';
+                echo '<span class="caption">'.$row["studyname"].'</span>';
                 echo '</label>';
                     echo '</tr>';
                    echo '<br>';

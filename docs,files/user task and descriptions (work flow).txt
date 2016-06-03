@@ -1,0 +1,38 @@
+me suggestions ako.... para maging simple ang process ng EC Learning System natin...
+at mas madali sa atin magawa ang mga pages....
+======
+
+1. student login
+
+2. student clicked Select Session
+
+2.1 student clicked Study Session (wala na tayo ilalagay na checkboxes sa lahat ng topics links nalang or gusto nyo pa ilagay checkboxes?)
+2.1.1 EC Learning System displays all topics and their sub topics with the ff links
+2.1.1.1 download/review materials (reading materials pdf)
+2.1.1.2 for pre-test/post test (immediately anytime they want to) on the same topic line 
+2.1.1.3 after the student have done the pre-test/post-test then we can give a link that would allow the student to conclude the review for this sub topic by means of showing all the questions and their rationale.
+
+2.2 student clicked Test Session
+2.2.1 EC Learning System displays all topics and their sub topics with ff links
+2.2.2  see available test(including post/pre-test if not yet done) as scheduled by admin/teacher (no retake) 
+2.2.3  view results of every test
+
+=======
+
+1. admin login
+
+2. admin clicked ......
+
+
+=======
+1. teacher login
+
+2. teacher clicked .....
+
+
+==========paki check
+-menuinterface.php (inilabas ko nalang para madali ma edit kapag me changes) include nalang
+-about to remove the tblbuffer (redundant na nga ito) :(
+-about to adjust remove 
+-edited reviewtopics.php & samplequestion.php and selectsession.php
+-etc
