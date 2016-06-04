@@ -97,11 +97,11 @@
 			if (!$con) {
 			    die("Connection failed: " . mysqli_connect_error());
 			}
-			 //$id = $_POST['rdtopic'];
+			 $id = $_POST['rdtopic'];
 
-			 //$sql = "CALL getStudyunits($id)"; // select id,topicid,studyname,isparent,parentid from studyunits where topicid = rid;
+			 $sql = "CALL getStudyunits($id)"; // select id,topicid,studyname,isparent,parentid from studyunits where topicid = rid;
 
-			$sql	= "select * from studyunits;";
+			//$sql	= "select * from studyunits;";
 
 
 			$result = mysqli_query($con, $sql);
@@ -112,7 +112,7 @@
 			// For avoiding some errors.
 			if ($result) {
 				// Start the list using ul.
-
+echo '<form method="post" action="samplequestion.php">';
 				echo '<table border="0">';
 				$ctr=0;
 				foreach ($result as $row) {
@@ -130,12 +130,13 @@
 			        		  <tr>
 			        			<td width="5%">&nbsp</td>
 			        			<td>';
+                        $subjid = $row['id'];
 						$studyname = $row['studyname'];
 						$topicid = $row['topicid'];
 						$isparent = $row['isparent'];
 						$parentid = $row['parentid'];
-						echo $row['studyname']." </td><td> <a href=samplequestion.php?pre-$topicid-$isparent-$parentid alt='click here to have the post test'>pre-test</a></td>";
-						echo "<td><a href=samplequestion.php?post-$topicid-$isparent-$parentid alt='click here to have the post test'>pre-test</a>";
+						echo $studyname." </td><td> <a href=samplequestion.php?nid=" . $subjid ."&alt=".$topicid." click here to have the post test' id='submit-pre' name='subj' value=".$row['id'].">pre-test</a></td>";
+						echo "<td><a href=samplequestion.php?post-$topicid-$isparent-$parentid alt='click here to have the post test' id='submit-post'>post-test</a>";
 						echo '</td></tr>';
 			        }
 				}
@@ -143,7 +144,7 @@
 				echo '<tr bgcolor="#003087"><td colspan="4"> </tr>';
 				echo "<tr><td colspan='4' align='center'>
 					    <!-- <input type=submit text='Next'/> -->";
-				echo '</td></tr></table>';
+				echo '</td></tr></table> </form>';
 
 			}
 			// Some message, if the database is empty.
@@ -174,7 +175,7 @@
 						/*
 						echo "<input type='checkbox' name= '$studyname' value='".$row['id']."'/>" .$row['studyname']."<a href=samplequestion.php?'$topicid-$isparent-$parentid'>take pre-test</a></br>";
 						*/
-						echo $row['studyname']."<a href=samplequestion.php?'$topicid-$isparent-$parentid'>take pre-test</a></br>";
+						//echo $row['studyname']."<a href=samplequestion.php?'$topicid-$isparent-$parentid'>take pre-test</a></br>";
 
 						// This is similar to our last code, but
 						// this function calls itself, so its recursive.
@@ -192,5 +193,5 @@
    </body>
 </html>
 
-
+<a href='asd.php?phone=0001112222'>click</a>
 
