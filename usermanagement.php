@@ -1,12 +1,14 @@
 <?PHP 
    session_start();
-   include_once("./udf/udf.php");
+   include_once("./controllers/udf.php");
    if(strlen(trim($_SESSION['usertype']))<1 ){
        siteRedirectWithAlert("You Must Login first!","login.php");
    }
    $usertype = strtolower($_SESSION['usertype']);
    $fname  = strtoupper($_SESSION['fname']);
-   
+   if(!(trim($usertype)=="admin" || trim($usertype)=="teacher")){
+    siteRedirectWithAlert("Sorry you are not allowed to use this module! ".$usertype,"index.php");
+   }
    $displaymenu = "<li><a href='#'>Profile</a></li> ";
    if($usertype=='admin') {
        $displaymenu .= "                   
