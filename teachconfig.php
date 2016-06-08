@@ -6,6 +6,8 @@ if(!(trim($usertype)=="admin" || trim($usertype)=="teacher")){
 // start of save user submitted data to table
 if(isset($_POST["txttype"])){
     $capture_field_vals ="";
+
+	//id processing
 	$ctr = 0;
 	$recID = implode(",", $_POST['id']);
 	$elementID = 0;
@@ -13,6 +15,34 @@ if(isset($_POST["txttype"])){
 		$ArrayDataID[$ctr] = "\"".trim($value)."\"";
 		$ctr++;
 	}
+	//end id processing
+	//minutes processing
+	$ctr = 0;
+	$txtminutes = implode(",", $_POST['txtminutes']);
+	$elementID = 0;
+	foreach (explode(',',$txtminutes) as $value){
+		$Arrayminutes[$ctr] = "\"".trim($value)."\"";
+		$ctr++;
+	}
+	//end minutes processing
+	//point processing
+	$ctr = 0;
+	$txtpoint = implode(",", $_POST['txtpoint']);
+	$elementID = 0;
+	foreach (explode(',',$txtpoint) as $value){
+		$Arraypoint[$ctr] = "\"".trim($value)."\"";
+		$ctr++;
+	}	
+	//end point processing
+	//level processing
+	$ctr = 0;
+	$txtlevel = implode(",", $_POST['txtlevel']);
+	$elementID = 0;
+	foreach (explode(',',$txtlevel) as $value){
+		$Arraylevel[$ctr] = "\"".trim($value)."\"";
+		$ctr++;
+	}	
+	//end level processing
 	$ctr = 0;
 	$sql = "";
 	$errCtr=0;
@@ -22,7 +52,11 @@ if(isset($_POST["txttype"])){
 		//echo " </br>";
 		$updatetype = $text_field;
 		$updateid = $ArrayDataID[$ctr];
-		$sql = "update examquestion set type = '$updatetype' where id=$updateid; ";
+		$updateminutes = $Arrayminutes[$ctr];
+		$updatepoint = $Arraypoint[$ctr];
+		$updatelevel = $Arraylevel[$ctr];
+		//txtminutes txtpoint txtlevel
+		$sql = "update examquestion set type = '$updatetype', minutes=$updateminutes, point=$updatepoint, level=$updatelevel where id=$updateid; ";
 		if(!ExecuteNoneQuery($sql)){
 			$errCtr++;
 			die("Database update error --> update examquestion table (user set type)...");
@@ -138,9 +172,15 @@ if(isset($_POST["txttype"])){
 				  $details .= "<tr bgcolor='$bgcolor'>
 									<td>$studyname</td>
 									<td>$question</td>
-									<td align='center'>$minutes</td>
-									<td align='center'>$point</td>
-									<td align='center'>$level</td>
+									<td align='center'>
+										<input name='txtminutes[]' type='text' id='txtminutes' value='$minutes' size='2' width='2' maxlength='2' required />
+									</td>
+									<td align='center'>
+										<input name='txtpoint[]' type='text' id='txtpoint' value='$point' size='2' width='2' maxlength='2' required />
+									</td>
+									<td align='center'>
+										<input name='txtlevel[]' type='text' id='txtlevel' value='$level' size='2' width='2' maxlength='2' required />
+									</td>
 									<td align='center'> 
 										<input type='hidden' name='id[]' id='id' value=' $id ' />
 										<input name='txttype[]' type='text' id='txttype' value='$type' size='2' width='2' maxlength='1' required />
