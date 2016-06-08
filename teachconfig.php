@@ -138,12 +138,12 @@ if(isset($_POST["txttype"])){
 				  $details .= "<tr bgcolor='$bgcolor'>
 									<td>$studyname</td>
 									<td>$question</td>
-									<td>$minutes</td>
-									<td>$point</td>
-									<td>$level</td>
-									<td> 
+									<td align='center'>$minutes</td>
+									<td align='center'>$point</td>
+									<td align='center'>$level</td>
+									<td align='center'> 
 										<input type='hidden' name='id[]' id='id' value=' $id ' />
-										<input name='txttype[]' type='text' id='txttype' value='$type' size='3' maxlength='1' />
+										<input name='txttype[]' type='text' id='txttype' value='$type' size='2' width='2' maxlength='1' required />
 									</td>
 							    </tr>";	
               }
@@ -157,17 +157,22 @@ if(isset($_POST["txttype"])){
 <!-- start html code to display the above detail -->
 	<form id="form_1136888" class="appnitro"  method="POST" action="#">
 	  <label for="usersfilter"></label>
-	  		<div align="center">
+	  		<div align="left">
 	  		  
  <!--	  		  Filter :
   <input name="usersfilter" type="text" id="usersfilter" size="80%" maxlength="100" /> 
   <br />
 	  		  <input type="submit" name="button3" id="button3" value="Save" />
 	  		  <br />
+	  		  <?PHP // echo $pagination; ?>
  --> 
-	  		  <?PHP echo $pagination; ?>
 	  </div>
-  		<table width='100%' border='1'>
+  		<table width='100%' border='1' cellpadding='3' cellspacing='3'>
+        <tr><td colspan="6">    
+            <div align="right">
+              <?PHP echo $pagination; ?>
+            </div>
+		</td></tr>
           <tr>
             <th width='16%' scope='col'>TopicID &amp; <br /> Study Name</th>
             <th width='76%' scope='col'>Question</th>
@@ -177,11 +182,13 @@ if(isset($_POST["txttype"])){
             <th width='2%' scope='col'>Type</th>
           </tr>
         	<?PHP echo $details ?>
+        <tr><td colspan="6">    
+            <div align="right">
+              <?PHP echo $pagination; ?>
+              <input type="submit" name="button2" id="button2" value="Save Changes" />
+            </div>
+		</td></tr>
         </table>
-      	<div align="center">
-      	  <input type="submit" name="button2" id="button2" value="Save Changes" />
-      	  <br />
-   	    <?PHP echo $pagination; ?></div>
      </form>
 <!-- end html code to display the above detail -->
 
