@@ -3,6 +3,41 @@ include_once('ECheader.php');
 if(!(trim($usertype)=="admin" || trim($usertype)=="teacher")){
   siteRedirectWithAlert("Sorry you are not allowed to use this module! ".$usertype,"index.php");
 }
+// start of save user submitted data to table
+if(isset($_POST["txttype"])){
+    $capture_field_vals ="";
+	$ctr = 0;
+	$recID = implode(",", $_POST['id']);
+	$elementID = 0;
+	foreach (explode(',',$recID) as $value){
+		$ArrayDataID[$ctr] = "\"".trim($value)."\"";
+		$ctr++;
+	}
+	$ctr = 0;
+	$sql = "";
+	$errCtr=0;
+	foreach($_POST["txttype"] as $key => $text_field){
+		//echo "txttype : $text_field ID : " ; // textfield is the txttype
+		//echo $ArrayDataID[$ctr];     // this is the record ID
+		//echo " </br>";
+		$updatetype = $text_field;
+		$updateid = $ArrayDataID[$ctr];
+		$sql = "update examquestion set type = '$updatetype' where id=$updateid; ";
+		if(!ExecuteNoneQuery($sql)){
+			$errCtr++;
+			die("Database update error --> update examquestion table (user set type)...");
+		}else{
+			//DisplayAlert("Updating of Exam Selection completed");	
+		}
+		$ctr++;
+    }
+	if($errCtr==0){
+		DisplayAlert("Updating of Exam Selection completed!!!!");	
+	}else {
+		DisplayAlert("WARNING!!!! - FAILED to Save Changes!!!!");			
+	}
+}
+// end of saving user submitted data to table
 ?>
 <!-- start of detail header line --> 
       <div class="container">
@@ -53,13 +88,6 @@ if(!(trim($usertype)=="admin" || trim($usertype)=="teacher")){
 			}
 			
 // end of pagination
-/*			$sql = "SELECT
-                      s.topicid,s.studyname,s.isparent,s.parentid,e.subjid,
-                      e.question,e.minutes,e.point,e.level,e.type 
-                    FROM studyunits s,examquestion e 
-                    where s.topicid=e.topicid LIMIT $start, $limit;"; 
-*/          // s.topicid,s.studyname,s.isparent,s.parentid,  
-			// e.topicid,e.subjid,e.question,e.minutes,e.point,e.level,e.type
 			$sql = "SELECT  *
                     FROM examquestion e 
                     order by topicid LIMIT $start, $limit ;"; 
@@ -105,14 +133,17 @@ if(!(trim($usertype)=="admin" || trim($usertype)=="teacher")){
 				  $point = $row['point'];
 				  $level = $row['level'];
 				  $type = $row['type'];
+				  $id = $row['id'];
+				  //'1 pre-test\n 2 post-test\n 3 short quiz\n 4 long quiz\n 5 major exam\n 6 All'
 				  $details .= "<tr bgcolor='$bgcolor'>
 									<td>$studyname</td>
 									<td>$question</td>
 									<td>$minutes</td>
 									<td>$point</td>
 									<td>$level</td>
-									<td> <!-- $type --> 
-									<input name='txttype' type='text' id='txttype' value='6' size='3' maxlength='1' />
+									<td> 
+										<input type='hidden' name='id[]' id='id' value=' $id ' />
+										<input name='txttype[]' type='text' id='txttype' value='$type' size='3' maxlength='1' />
 									</td>
 							    </tr>";	
               }
@@ -124,12 +155,16 @@ if(!(trim($usertype)=="admin" || trim($usertype)=="teacher")){
             ?>
 <!-- end of detail line codes below -->
 <!-- start html code to display the above detail -->
-	<form id="form_1136888" class="appnitro"  method="post" action="#">
+	<form id="form_1136888" class="appnitro"  method="POST" action="#">
 	  <label for="usersfilter"></label>
-	  		<div align="center">Filter :
-  <input name="usersfilter" type="text" id="usersfilter" size="80%" maxlength="100" />
-	  		  <input type="submit" name="button" id="button" value="Submit" />
+	  		<div align="center">
+	  		  
+ <!--	  		  Filter :
+  <input name="usersfilter" type="text" id="usersfilter" size="80%" maxlength="100" /> 
+  <br />
+	  		  <input type="submit" name="button3" id="button3" value="Save" />
 	  		  <br />
+ --> 
 	  		  <?PHP echo $pagination; ?>
 	  </div>
   		<table width='100%' border='1'>
@@ -143,14 +178,11 @@ if(!(trim($usertype)=="admin" || trim($usertype)=="teacher")){
           </tr>
         	<?PHP echo $details ?>
         </table>
-      	<?PHP echo $pagination; ?>
+      	<div align="center">
+      	  <input type="submit" name="button2" id="button2" value="Save Changes" />
+      	  <br />
+   	    <?PHP echo $pagination; ?></div>
      </form>
-<!-- 
-    <form id="form1" name="form1" method="post" action="">
-      <label for="txttype"></label>
-      <input name="txttype" type="text" id="txttype" value="6" size="3" maxlength="1" />
-    </form>
--->
 <!-- end html code to display the above detail -->
 
 <?php
