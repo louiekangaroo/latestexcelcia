@@ -134,7 +134,7 @@ function mypagination($tblnames,$filter,$targetphp){
 	}
 	/* Setup vars for query. */
 	$targetpage = $targetphp; 						//your file name  (the name of this file) - if left blank this directs to the same file(php)
-	$limit = 15;
+	$limit = 20;
 	/*
 	if(isset($_REQUEST['limit'])){					//set this as form object 
 		$limit = $_REQUEST['limit'];
@@ -250,12 +250,7 @@ return $pagination;
 
 function SaveLog($fullname,$logdesc){
 	include('./controllers/connection.php');
-	/*
-	$host="gil-pc"; //hostname
-	$username="pela";//username
-	$password="pela"; //database password
-	$db_name="excelcia";//database name
-	*/
+
 	$connection1 	= mysqli_connect("$host" , "$username" , "$password", $db_name) 
 			  or die ("Can't connect to MySQL <meta http-equiv='refresh' content='10; URL=index.php?mnu=11111'>");
 	$tb='userlogs';
@@ -289,9 +284,10 @@ function DisplayAlert($alert){
 function ExecuteNoneQuery($vSQLcmd){
 	$feedback = false;
 	include('./controllers/connection.php');
-	$results = mysqli_query($con, $vSQLcmd) or die ("Could not execute query : $vSQLcmd . " . mysqli_error());
+	$con1 = mysqli_connect($host,$username,$password,$db_name) or die ("cannot connect to server");
+	$results = mysqli_query($con1, $vSQLcmd) or die ("</br></br></br>[UDF module] Could not execute query :</br> $vSQLcmd . " . mysqli_error());
     if ($results){
-		mysqli_close($con);
+		mysqli_close($con1);
 		//DisplayAlert("Database update success...");
 		$feedback = true;
     }else{
