@@ -174,7 +174,7 @@ if(isset($_POST["txttype"])){
 				  //'1 pre-test\n 2 post-test\n 3 short quiz\n 4 long quiz\n 5 major exam\n 6 All'
 				  $details .= "<tr bgcolor='$bgcolor'>
 									<td>$studyname</td>
-									<td>$question</td>
+									<td>$question<div align='right'><a href='#'>EDIT/SHOW ANSWER</a></div></td>
 									<td align='center'>
 										<input name='txtminutes[]' type='text' id='txtminutes' value='$minutes' size='2' width='2' maxlength='2' required />
 									</td>
@@ -201,20 +201,12 @@ if(isset($_POST["txttype"])){
 <!-- end of detail line codes below -->
 <!-- start html code to display the above detail -->
 	<form id="form_1136888" class="appnitro"  method="POST" action="#">
-	  <label for="usersfilter"></label>
-	  		<div align="left">
-	  		  
-	  		  Filter :
-  <input name="usersfilter" type="text" id="usersfilter" size="80%" maxlength="100" value ='<?PHP echo $usersfilter; ?>' />BLANK for ALL
-  <br />
-	  		  <!-- <input type="submit" name="button3" id="button3" value="Save" /> -->
-	  		  <br />
-	  		  <?PHP // echo $pagination; ?>
-
-	  </div>
   		<table width='100%' border='1' cellpadding='3' cellspacing='3'>
         <tr><td colspan="6">    
-            <div align="right">
+            <div align="center">
+	  		  Filter :
+  <input name="usersfilter" type="text" id="usersfilter" size="80%" maxlength="100" value ='<?PHP echo $usersfilter; ?>' />BLANK for ALL
+	  		  <!-- <input type="submit" name="button3" id="button3" value="Save" /> -->
               <?PHP echo $pagination; ?>
             </div>
 		</td></tr>
@@ -228,7 +220,7 @@ if(isset($_POST["txttype"])){
           </tr>
         	<?PHP echo $details ?>
         <tr><td colspan="6">    
-            <div align="right">
+            <div align="center">
               <?PHP echo $pagination; ?>
               <input type="submit" name="button2" id="button2" value="Save Changes" />
               <!-- <a href="##" onclick="window.print()">Printer Friendly</a> -->
