@@ -1,77 +1,10 @@
 <?php
-include_once('ECheader.php');
-if(!(trim($usertype)=="admin" || trim($usertype)=="teacher")){
-  siteRedirectWithAlert("Sorry you are not allowed to use this module! ".$usertype,"index.php");
-}
-// start of save user submitted data to table
-if(isset($_POST["txttype"])){
-    $capture_field_vals ="";
-
-	//id processing
-	$ctr = 0;
-	$recID = implode(",", $_POST['id']);
-	$elementID = 0;
-	foreach (explode(',',$recID) as $value){
-		$ArrayDataID[$ctr] = "\"".trim($value)."\"";
-		$ctr++;
+	session_start();
+	include_once("controllers/udf.php");
+	include_once("menuinterface.php");
+	if(!(trim($usertype)=="admin" || trim($usertype)=="teacher")){
+		siteRedirectWithAlert("Sorry you are not allowed to use this module! ".$usertype,"index.php");
 	}
-	//end id processing
-	//minutes processing
-	$ctr = 0;
-	$txtminutes = implode(",", $_POST['txtminutes']);
-	$elementID = 0;
-	foreach (explode(',',$txtminutes) as $value){
-		$Arrayminutes[$ctr] = "\"".trim($value)."\"";
-		$ctr++;
-	}
-	//end minutes processing
-	//point processing
-	$ctr = 0;
-	$txtpoint = implode(",", $_POST['txtpoint']);
-	$elementID = 0;
-	foreach (explode(',',$txtpoint) as $value){
-		$Arraypoint[$ctr] = "\"".trim($value)."\"";
-		$ctr++;
-	}	
-	//end point processing
-	//level processing
-	$ctr = 0;
-	$txtlevel = implode(",", $_POST['txtlevel']);
-	$elementID = 0;
-	foreach (explode(',',$txtlevel) as $value){
-		$Arraylevel[$ctr] = "\"".trim($value)."\"";
-		$ctr++;
-	}	
-	//end level processing
-	$ctr = 0;
-	$sql = "";
-	$errCtr=0;
-	foreach($_POST["txttype"] as $key => $text_field){
-		//echo "txttype : $text_field ID : " ; // textfield is the txttype
-		//echo $ArrayDataID[$ctr];     // this is the record ID
-		//echo " </br>";
-		$updatetype = $text_field;
-		$updateid = $ArrayDataID[$ctr];
-		$updateminutes = $Arrayminutes[$ctr];
-		$updatepoint = $Arraypoint[$ctr];
-		$updatelevel = $Arraylevel[$ctr];
-		//txtminutes txtpoint txtlevel
-		$sql = "update examquestion set type = '$updatetype', minutes=$updateminutes, point=$updatepoint, level=$updatelevel where id=$updateid; ";
-		if(!ExecuteNoneQuery($sql)){
-			$errCtr++;
-			die("Database update error --> update examquestion table (user set type)...");
-		}else{
-			//DisplayAlert("Updating of Exam Selection completed");	
-		}
-		$ctr++;
-    }
-	if($errCtr==0){
-		//DisplayAlert("Updating of Exam Selection completed!!!!");	
-	}else {
-		DisplayAlert("WARNING!!!! - FAILED to Save Changes!!!!");			
-	}
-}
-// end of saving user submitted data to table
 ?>
 <!-- start of detail header line --> 
       <div class="container">
@@ -88,14 +21,11 @@ if(isset($_POST["txttype"])){
             if (!$con) {
                 die("Connection failed: " . mysqli_connect_error());
             }
+
 //start of pagination
-/*
-			$tbnames =" studyunits s,examquestion e ";
-			$filter = " where s.topicid=e.topicid; ";
-*/
 			$tbnames =" examquestion e ";
-			$filter = "";
-			$usersfilter = $filter;
+			$filter = "  ";
+
 			if(isset($_REQUEST['usersfilter'])){
 				$usersfilter = $_REQUEST['usersfilter'];
 				$_SESSION['sessionfilter'] = $usersfilter;
@@ -110,7 +40,8 @@ if(isset($_POST["txttype"])){
 				$filter .= " or concat(topicid,subjid,level,question,minutes,point,type) like '%$usersfilter%' ";	
 			}
 			$targetphp = "teachconfig.php";
-			$pagination = mypagination($tbnames,$filter,$targetphp);	// set the pagination control			
+/*			
+			//$pagination = mypagination($tbnames,$filter,$targetphp);	// set the pagination control			
 			$vResponse = '0';
 			require("controllers/connection.php");
 			if(isset($_SESSION['start']) && isset($_SESSION['limit'])) {
@@ -119,16 +50,20 @@ if(isset($_POST["txttype"])){
 			}else{
 				$start = 1;
 				$limit = 15;   // limit number of records per page 	also need to set this value on pagination function			
-			}
-			
+			}	
+*/
 // end of pagination
+			$start = 0;
+			$limit = 0;
+			$sql = "SELECT  *
+                    FROM examquestion e 
+                    order by topicid LIMIT $start, $limit ;"; 
+            // display only s.topicid, s.studyname,e.question,e.minutes,e.point,e.level,etype
+
+
 			$sql = "SELECT  *
                     FROM examquestion e $filter
-                    order by topicid LIMIT $start, $limit ;"; 
-					
-			//die ($sql.' - using filter - '.$filter );
-					
-            // display only s.topicid, s.studyname,e.question,e.minutes,e.point,e.level,etype
+                    order by topicid"; 
 			
 			//die($sql);
 			
@@ -146,22 +81,14 @@ if(isset($_POST["txttype"])){
 				  if(strlen($studyname)<1){
 				  	$studyname = "<font color='red'> Error in Studyname </font>";
 				  }
-				  /*
-				  if(!($tmpstudyname == $row['studyname'])) {
-				  	$tmpstudyname = $row['studyname'];
-					$showstudyname = $row['studyname'];
-					$topicid = "(". $row['topicid'] .")-";
-				  }else {
-					$showstudyname = "";
-					$topicid = "";  
-				  };
-				  */
+				  $bgcolor = ""; 	
+
+/*
 				  $bgcolor = "#3399FF";
 				  if($ctr%2){
 					  $bgcolor = "#CCFFFF";
 				  }
-				  // s.topicid,s.studyname,s.isparent,s.parentid,  
-				  //$studyname = ""; //$showstudyname;
+*/
 				  $isparent = ""; //$row['isparent'];
 				  $parentid = ""; //$row['parentid'];
 				  $subjid = ""; //$row['subjid'];
@@ -171,7 +98,6 @@ if(isset($_POST["txttype"])){
 				  $level = $row['level'];
 				  $type = $row['type'];
 				  $id = $row['id'];
-				  //'1 pre-test\n 2 post-test\n 3 short quiz\n 4 long quiz\n 5 major exam\n 6 All'
 				  $details .= "<tr bgcolor='$bgcolor'>
 									<td>$studyname</td>
 									<td>$question</td>
@@ -192,9 +118,7 @@ if(isset($_POST["txttype"])){
               }
             }
             else {
-              $details =  "<tr bgcolor='$bgcolor'>
-			  				<td colspan='6'>No Items</td>
-						   </tr>";// Some message, if the database is empty.
+              echo 'No Items';// Some message, if the database is empty.
             }
             mysqli_free_result($result);// Clear the memory.
             ?>
@@ -204,18 +128,18 @@ if(isset($_POST["txttype"])){
 	  <label for="usersfilter"></label>
 	  		<div align="left">
 	  		  
-	  		  Filter :
-  <input name="usersfilter" type="text" id="usersfilter" size="80%" maxlength="100" value ='<?PHP echo $usersfilter; ?>' />BLANK for ALL
+ <!--	  		  Filter :
+  <input name="usersfilter" type="text" id="usersfilter" size="80%" maxlength="100" /> 
   <br />
-	  		  <!-- <input type="submit" name="button3" id="button3" value="Save" /> -->
+	  		  <input type="submit" name="button3" id="button3" value="Save" />
 	  		  <br />
 	  		  <?PHP // echo $pagination; ?>
-
+ --> 
 	  </div>
-  		<table width='100%' border='1' cellpadding='3' cellspacing='3'>
+  		<table width='95%' border='1' cellpadding='3' cellspacing='3'>
         <tr><td colspan="6">    
             <div align="right">
-              <?PHP echo $pagination; ?>
+              <?PHP //echo $pagination; ?>
             </div>
 		</td></tr>
           <tr>
@@ -229,10 +153,10 @@ if(isset($_POST["txttype"])){
         	<?PHP echo $details ?>
         <tr><td colspan="6">    
             <div align="right">
-              <?PHP echo $pagination; ?>
-              <input type="submit" name="button2" id="button2" value="Save Changes" />
-              <!-- <a href="##" onclick="window.print()">Printer Friendly</a> -->
-              <a href="printteachconfig.php" target="printthis">Printer Friendly</a>
+              <?PHP // echo $pagination; ?>
+              <!-- <input type="submit" name="button2" id="button2" value="Save Changes" /> -->
+              <a href="##" onclick="window.print()">Print Now</a>
+              <a href="##" onClick="window.close()">Close This</a>
             </div>
 		</td></tr>
         </table>
