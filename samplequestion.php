@@ -1,5 +1,26 @@
 <?PHP
 include_once('ECheader.php');
+$topicID=$_POST['topicid'];
+if (!$_COOKIE["topicid"]){
+setcookie("topicid", $topicID);
+}
+
+if(!empty($_POST['chkstudy'])) {
+    foreach($_POST['chkstudy'] as $check) {
+            //echoes the value set in the HTML form for each checked checkbox.
+                         //so, if I were to check 1, 3, and 5 it would echo value 1, value 3, value 5.
+                         //in your case, it would echo whatever $row['Report ID'] is equivalent to.
+       $subjID .= $check . ",";
+       
+    }
+    $subjID =  substr($subjID, 0, -1);
+    if (!$_COOKIE["subjid"]){
+    setcookie("subjid", $subjID);
+    }
+    
+}
+
+
 ?>
       <div class="container">
          <div class="main-content clear-float">
@@ -13,29 +34,44 @@ include_once('ECheader.php');
 
 
 
- $nid = $_GET['nid'];
- $alt = $_GET['alt'];
-//echo $_POST['subj'];
-	$topicID = '1';
-	$testtype = "pre-test";
+ //$nid = $_GET['nid'];
+ //$alt = $_GET['alt'];
+
+
+  $subjID ='';
+
+   // $subjID = $_POST['chkstudy'];
+
+	//$testtype = "pre-test";
 	$studentID = '1';
-    $subjID = '2';
+ 
+    //echo $topicID;
+    $c_topicid = $_COOKIE["topicid"];
+    $c_subjid = $_COOKIE["subjid"];
+
+    echo $subjID;
+    //echo $sessiontype;
 	
 
 	//the testsessionid
-	$testsessionid = $topicID.'-'.$testtype.'-'.$studentID;
+	//$testsessionid = $topicID.'-'.$testtype.'-'.$studentID;
 
 	// we need php session variable for the $topicID, $testtype, $studentID  
 
-	$itemseasy = getfieldvalue("topic_config", "itemseasy", "where topicid = '$alt' and testtype = '$testtype'");
+    //$sessiontype = $_POST['session'];
+
+    $itemseasy = getfieldvalue("topic_config", "itemseasy", "where testtype = '$c_topicid'");
     //echo $itemseasy;
-	$itemsmoderate = getfieldvalue("topic_config", "itemsmoderate", "where topicid = '$alt' and testtype = '$testtype'");
+	$itemsmoderate = getfieldvalue("topic_config", "itemsmoderate", "where testtype = '$c_topicid'");
     //echo $itemsmoderate;
-	$itemsdifficult = getfieldvalue("topic_config", "itemsdifficult", "where topicid = '$alt' and testtype = '$testtype'");
+	$itemsdifficult = getfieldvalue("topic_config", "itemsdifficult", "where testtype = '$c_topicid'");
     //echo $itemsdifficult;
 
-    $sqlscript = "call generateQuestions('1','$alt','$nid','$testtype',$itemseasy,$itemsmoderate,$itemsdifficult)";
-    ExecuteNoneQuery($sqlscript);
+    $sqlscript = "call generateQuestions('1','$c_topicid','$c_subjid','$c_topicid',$itemseasy,$itemsmoderate,$itemsdifficult)";
+    ExecuteNoneQuery($sqlscript);   
+
+    
+
 
 ?>
 
@@ -45,7 +81,7 @@ include_once('ECheader.php');
 
 require('./controllers/connection.php');
 global $con;
- //session_start();
+
     if(!isset($a))
     {
         $a=0;
@@ -57,10 +93,19 @@ if(isset($_POST['next'])) {
         $a=$_POST['a'];
     
 }
-
+if(isset($_POST['sbmit'])) {
+        $a=$_POST['a'];
+    
+}
  //$sql = "select * from examquestion eq inner join studentsession ss on eq.id = ss.questionid" ;
 //`generateQuestions`(IN studid INT,IN `topid` INT,IN `subid` VARCHAR(50),IN _type VARCHAR(50),IN toteasy INT,IN totmed INT,IN totdiff INT)
- $sql= "call getQuestion('".$a."','1','$alt','$nid')";//"SELECT * FROM examquestion eq INNER JOIN studentsession ss ON eq.id = ss.questionid ORDER BY ss.id LIMIT 1 OFFSET $a";
+//"SELECT * FROM examquestion eq INNER JOIN studentsession ss ON eq.id = ss.questionid ORDER BY ss.id LIMIT 1 OFFSET $a";
+if(isset($_POST['qtopic'])) {
+        $topicID = $_POST['qtopic'];
+    
+}
+ $sql= "call getQuestion('".$a."','1','$c_topicid','$c_subjid')";
+
  $result = $con->query($sql);
 
     //$sql1="SELECT * FROM questionpart2 ORDER by qid LIMIT 1 OFFSET $a";
@@ -76,6 +121,7 @@ if(isset($_POST['next'])) {
  
     $qid = $row["id"];
     $questions = $row["question"];
+    $topicID2 = $row["topicid"];
     $opt1 = $row["a"];
     $opt2 = $row["b"];
     $opt3 = $row["c"];
@@ -87,21 +133,42 @@ if(isset($_POST['next'])) {
     $rational_c = $row["c_rational"];
     $rational_d = $row["d_rational"];
 
-    echo   "<h3>" .$questions. "</h3>";
+    echo   "<h3>" .($a + 1).'. '.$questions. "</h3>";
 	echo   "<div>";
-    echo   "<input type='radio' name='question_answers' id='question-1-answers-A' value='a' />";
+   // echo   "<input type='radio' name='question_answers' id='question-1-answers-A' value='a' '".if(isset($_POST['question_answers']) && $_POST['question_answers'] == 'a') echo 'checked="checked"'; ."'/>";
+   // echo   '<input type="radio" name="question_answers" id="question-1-answers-A" value="a.(isset($_POST['question_answers']) && $_POST['question_answers'] == 'a')?'checked="checked"':"")./>';
+    echo '<input type="radio" id="question-1-answers-A" name="question_answers" value="a"';
+    if(isset($_POST['question_answers']) && $_POST['question_answers'] == 'a') { 
+      echo ' checked="checked"'; 
+    } 
+    echo ' >'; 
     echo   "<label for='question-1-answers-A'>". $opt1. "</label>";
     echo   "</div>";
     echo   "<div>";
-    echo   "<input type='radio' name='question_answers' id='question-1-answers-B' value='b' />";
+    //echo   "<input type='radio' name='question_answers' id='question-1-answers-B' value='b' />";
+    echo   '<input type="radio" id="question-1-answers-B" name="question_answers" value="b"';
+    if(isset($_POST['question_answers']) && $_POST['question_answers'] == 'b') { 
+      echo ' checked="checked"'; 
+    } 
+    echo ' >'; 
     echo   "<label for='question-1-answers-B'>". $opt2. "</label>";
     echo   "</div>";               
     echo   "<div>";
-    echo   "<input type='radio' name='question_answers' id='question-1-answers-C' value='c' />";
+    //echo   "<input type='radio' name='question_answers' id='question-1-answers-C' value='c' />";
+    echo   '<input type="radio" id="question-1-answers-C" name="question_answers" value="c"';
+    if(isset($_POST['question_answers']) && $_POST['question_answers'] == 'c') { 
+      echo ' checked="checked"'; 
+    } 
+    echo ' >'; 
     echo   "<label for='question-1-answers-C'>" . $opt3. "</label>";
     echo   "</div>";
     echo   "<div>";
-    echo   "<input type='radio' name='question_answers' id='question-1-answers-D' value='d' />";
+    //echo   "<input type='radio' name='question_answers' id='question-1-answers-D' value='d' />";
+    echo   '<input type="radio" id="question-1-answers-D" name="question_answers" value="d"';
+    if(isset($_POST['question_answers']) && $_POST['question_answers'] == 'd') { 
+      echo ' checked="checked"'; 
+    } 
+    echo ' >'; 
     echo   "<label for='question-1-answers-D'>" . $opt4. "</label>";
     echo   "</div>";
     echo   "</li>"; 
@@ -110,7 +177,9 @@ if(isset($_POST['next'])) {
     
 	echo   "</div>";
     echo   "<input type='hidden' name='question_id' value''.$qid.''/>";
+    echo   "<input type='hidden' name='qtopic' value''.$topicID2.''/>";
     echo   "<input type='hidden' name='rightanswer[' . $qid . ']' value='' . $answer . '' /> <br>";
+    echo   "<input type='submit' name='sbmit' value='submit answer'>    ";
     echo   "<input type='submit' name='next' value='next question'><br><br>";
     
     }
@@ -130,13 +199,7 @@ if(isset($_POST['next'])) {
 <?php
   include ('./controllers/connection.php');
   global $con;
-   
- $nid = $_GET['nid'];
- $alt = $_GET['alt'];
-
-
-
-  $myQuery = "SELECT SUM(eq.minutes) AS MIN FROM examquestion eq INNER JOIN studentsession ss ON eq.id = ss.questionid WHERE ss.studentid = 1 AND eq.topicid = '$alt' AND eq.SUBJID = '$nid'";
+  $myQuery = "SELECT SUM(eq.minutes) AS MIN FROM examquestion eq INNER JOIN studentsession ss ON eq.id = ss.questionid WHERE ss.studentid = 1 AND eq.topicid = '$c_topicid' AND FIND_IN_SET(eq.SUBJID, '$c_subjid')";
 
  $result = $con->query($myQuery);
  $num = $result->num_rows;
@@ -170,6 +233,79 @@ $seconds = $diff;
 
 ?>
 
+
+
+<?php
+    
+    if(isset($_POST['question_answers']))
+    {
+        //$_SESSION['question_id'] = array();
+        //$id = $_POST['question_id'];
+  
+       /// $_SESSION['score'] = (!$_SESSION['score']) ? 0 : $_SESSION['score'];
+ 
+        ///foreach($_POST['question_answers'] as $qid => $answer)
+         ///if($_POST['rightanswer'][$qid] == $answer) {
+ 
+       /// $_SESSION['score']++;
+ 
+       /// }
+       /// echo " Score is " . $_SESSION['score'];
+      ///  }
+       // echo '<script type="text/javascript">alert("' . $qid . '")</script>';
+       // echo $_POST['question_id'];
+          if(isset($answer))
+    {
+        $qid = $qid - 1;
+       $sql1 = "UPDATE studentsession SET answer='".$_POST['question_answers']."' WHERE id='$qid'"; 
+     
+      $success = $con->query($sql1);
+       
+    if($success == false)
+     {
+	   echo"An error has occured".mysql_error();
+	 }
+     else
+     {
+         if($_POST['question_answers'] == $answer) 
+        {
+            //echo 'correct';
+            echo '<script type="text/javascript">alert("correct")</script>';
+        }
+         else
+         {         
+             echo '<span style="color:red; font-size:18px; line-height:35px; font-family: Calibri;">Rational : </span>'; 
+             if($_POST['question_answers'] == 'a'){
+             
+                // '<span style="font-color:red;">'.$rational_a.'</span>';
+                echo '<span style="color:red; font-size:18px; line-height:35px; font-family: Calibri;">'.$rational_a.'</span>';
+             } else if($_POST['question_answers'] == 'b') {
+                 //echo $rational_b;
+                 //echo '<script type="text/javascript">alert("' . $rational_b . '")</script>';
+                 echo '<span style="color:red; font-size:18px; line-height:35px; font-family: Calibri;">'.$rational_b.'</span>';
+             }else if($_POST['question_answers'] == 'c') {
+                 //echo $rational_c;
+                 //echo '<script type="text/javascript">alert("' . $rational_c . '")</script>';
+                 echo '<span style="color:red; font-size:18px; line-height:35px; font-family: Calibri;">'.$rational_c.'</span>';
+             }else if($_POST['question_answers'] == 'd') {
+                 //echo $rational_d;
+                 //echo '<script type="text/javascript">alert("' . $rational_d . '")</script>';
+                 echo '<span style="color:red; font-size:18px; line-height:35px; font-family: Calibri;">'.$rational_d.'</span>';
+             } else {
+             }
+
+         }
+    
+       
+     }
+    } else {
+              echo 'Thanks for taking the Review Session';
+          }
+ 
+    } else {
+   
+    }
+?>
 <div id="strclock">Clock Here!</div>
 <script type="text/javascript">
  var hour = <?php echo floor($hours); ?>;
@@ -204,74 +340,6 @@ function countdown() {
  }
  countdown();
 </script>
-
-<?php
-    
-    if(isset($_POST['question_answers']))
-    {
-        //$_SESSION['question_id'] = array();
-        //$id = $_POST['question_id'];
-  
-       /// $_SESSION['score'] = (!$_SESSION['score']) ? 0 : $_SESSION['score'];
- 
-        ///foreach($_POST['question_answers'] as $qid => $answer)
-         ///if($_POST['rightanswer'][$qid] == $answer) {
- 
-       /// $_SESSION['score']++;
- 
-       /// }
-       /// echo " Score is " . $_SESSION['score'];
-      ///  }
-       // echo '<script type="text/javascript">alert("' . $qid . '")</script>';
-       // echo $_POST['question_id'];
-          if(isset($answer))
-    {
-        $qid = $qid - 1;
-       $sql1 = "UPDATE studentsession SET answer='".$_POST['question_answers']."' WHERE id='$qid'"; 
-     
-      $success = $con->query($sql1);
-       
-    if($success == false)
-     {
-	   echo"An error has occured".mysql_error();
-	 }
-     else
-     {
-       
-         if($_POST['question_answers'] == $answer) 
-        {
-            //echo 'correct';
-            echo '<script type="text/javascript">alert("correct")</script>';
-        }
-         else
-         {           
-             if($_POST['question_answers'] = 'a'){
-                 //echo $rational_a;
-                echo '<script type="text/javascript">alert("' . $rational_a . '")</script>';
-             } else if($_POST['question_answers'] = 'b') {
-                 //echo $rational_b;
-                 echo '<script type="text/javascript">alert("' . $rational_b . '")</script>';
-             }else if($_POST['question_answers'] = 'c') {
-                 //echo $rational_c;
-                 echo '<script type="text/javascript">alert("' . $rational_c . '")</script>';
-             }else if($_POST['question_answers'] = 'd') {
-                 //echo $rational_d;
-                 echo '<script type="text/javascript">alert("' . $rational_d . '")</script>';
-             } else {
-             }
-
-         }
-    
-       
-     }
-    } else {
-              echo 'Thanks for taking the Review Session';
-          }
- 
-    } else {
-   
-    }
-?>
  <?PHP 
 include_once('ECfooter.php');
 ?>            

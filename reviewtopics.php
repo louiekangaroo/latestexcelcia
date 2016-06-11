@@ -16,27 +16,29 @@ include_once('ECheader.php');
                 die("Connection failed: " . mysqli_connect_error());
                }
                
-               // $sql = "CALL getReviewtopic()";
-               $sql = "select * from studyunits where isparent=1;";
+                $sql = "CALL getReviewtopic()";
+               //$sql = "select * from studyunits where isparent=1;";
 
                $result = mysqli_query($con, $sql);
-               
+               $sessiontype = $_POST['session'];
+               echo $sessiontype;
                echo '<form name="revform" method="post" action="studyunits.php"><div class="coolTable" ><table><tr><td></td></tr>';
                foreach ($result as $row){
                 
                
                echo '<tr>';
                echo '<label class="input-control radio" >';
-                //echo '<input type="radio" name="rdtopic" value="'.$row['id'].'" id="rdio">';
-               echo '<input type="radio" name="rdtopic" value="'.$row['topicid'].'" id="rdio">';
+                echo '<input type="radio" name="rdtopic" value="'.$row['id'].'" id="rdio">';
+               //echo '<input type="radio" name="rdtopic" value="'.$row['topicid'].'" id="rdio">';
                 echo '<span class="check"></span>';
-                //echo '<span class="caption">'.$row["topicname"].'</span>';
-                echo '<span class="caption">'.$row["studyname"].'</span>';
+                echo '<span class="caption" name="testtype">'.$row["topicname"].'</span>';
+                //echo '<span class="caption">'.$row["studyname"].'</span>';
                 echo '</label>';
                     echo '</tr>';
                    echo '<br>';
                 }
                echo '</table></div>';
+               echo "<input type='hidden' value='$sessiontype' name='session'>";
                echo '<button id="btnStartSession" id="submit" class="button primary btn">Submit</button></form>';
                 
                ?>

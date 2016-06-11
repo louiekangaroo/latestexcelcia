@@ -8,13 +8,13 @@ include_once('ECheader.php');
            <!-- <form method="post" action="reviewtopics.php"> -->
             <form method="post" action="reviewtopics.php"> 
               <label class="input-control radio">
-                  <input type="radio" name="session" checked>
+                  <input type="radio" name="session" value = '0' checked>
                   <span class="check"></span>
                   <span class="caption">Study Session</span>
               </label>
               <br>
               <label class="input-control radio">
-                <input type="radio" name="session">
+                <input type="radio" name="session" value = '1' >
                 <span class="check"></span>
                 <span class="caption">Test Session</span>
               </label>
