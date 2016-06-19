@@ -59,6 +59,7 @@ function ChkUserLogin($vUserID,$vUserPassword){
 	$i=0;
 	include('./controllers/connection.php');
 
+	$_SESSION['studentID']	='';
 	$_SESSION['address']	='';
 	$_SESSION['contactno']	='';
 	$_SESSION['emailadd']	='';
@@ -89,6 +90,7 @@ function ChkUserLogin($vUserID,$vUserPassword){
 		$i=0;
 		while ($row = mysqli_fetch_array($UserResult)){		
 
+				$_SESSION['studentID']  =stripslashes($row['id']);
 				$_SESSION['address']	=stripslashes($row['address']);
 				$_SESSION['contactno']	=stripslashes($row['contactno']);
 				$_SESSION['emailadd']	=stripslashes($row['emailadd']);
@@ -313,7 +315,8 @@ function getfieldvalue($table, $fieldname, $condition){
 	}
 	$UserQuery = "SELECT $fieldname FROM $table $condition;";
 	
-	//die($UserQuery);
+	// die ($UserQuery);
+	// echo $UserQuery;
 
 	$UserResult = mysqli_query($con1,$UserQuery);
 	$UserNum = mysqli_num_rows($UserResult);

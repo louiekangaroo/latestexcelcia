@@ -3,6 +3,7 @@ session_start();
 include_once("./controllers/udf.php");
 
 /* session variables */
+	$_SESSION['studentID']	='';
     $_SESSION['address']    ='';
     $_SESSION['contactno']  ='';
     $_SESSION['emailadd']   ='';
