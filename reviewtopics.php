@@ -21,7 +21,7 @@ include_once('ECheader.php');
 
                $result = mysqli_query($con, $sql);
                $sessiontype = $_POST['session'];
-               echo $sessiontype;
+               //echo $sessiontype;
                echo '<form name="revform" method="post" action="studyunits.php"><div class="coolTable" ><table><tr><td></td></tr>';
                foreach ($result as $row){
                 

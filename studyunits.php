@@ -1,5 +1,7 @@
 <?PHP
 include_once('ECheader.php');
+
+
 ?>
       
       <div class="container">
@@ -15,9 +17,10 @@ include_once('ECheader.php');
 			if (!$con) {
 			    die("Connection failed: " . mysqli_connect_error());
 			}
-			 $id = $_POST['rdtopic'];
-
-             echo $id;
+			 $tid = $_POST['rdtopic'];
+             $id = $_POST['session'];
+             echo $tid;
+echo $id;
 			 $sql = "CALL getStudyunits()"; // select id,topicid,studyname,isparent,parentid from studyunits where topicid = rid;
 
 			//$sql	= "select * from studyunits;";
@@ -47,8 +50,8 @@ if ($result) {
 	}
 	// End the list.
 	echo '</ul>';
-    echo "<input type='hidden' value='$id' name='topicid'>";
-    echo "<input type='hidden' value='$id' name='session'>";
+    echo "<input type='hidden' value='$tid' name='topicid'>";
+    echo "<input type='hidden' value='$id' name='seID'>";
     echo '<button id="btnStartSession" id="submit" class="button primary btn">Submit</button></form>';
 }
 // Some message, if the database is empty.

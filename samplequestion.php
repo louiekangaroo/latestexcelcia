@@ -1,10 +1,15 @@
 <?PHP
 include_once('ECheader.php');
+
+
+//echo $_POST['topicid'];
+$selID =  (isset($_POST['selID']))?$_POST['selID']:NULL;
+echo $selID;
+$subjID ='';
 $topicID=$_POST['topicid'];
 if (!$_COOKIE["topicid"]){
 setcookie("topicid", $topicID);
 }
-
 if(!empty($_POST['chkstudy'])) {
     foreach($_POST['chkstudy'] as $check) {
             //echoes the value set in the HTML form for each checked checkbox.
@@ -19,8 +24,6 @@ if(!empty($_POST['chkstudy'])) {
     }
     
 }
-
-
 ?>
       <div class="container">
          <div class="main-content clear-float">
@@ -31,64 +34,50 @@ if(!empty($_POST['chkstudy'])) {
    //session_start();
    include_once("./controllers/udf.php");
    include_once("menuinterface.php");
-
-
-
  //$nid = $_GET['nid'];
  //$alt = $_GET['alt'];
-
-
   $subjID ='';
 
-   // $subjID = $_POST['chkstudy'];
 
+   // $subjID = $_POST['chkstudy'];
 	//$testtype = "pre-test";
 	$studentID = '1';
  
     //echo $topicID;
     $c_topicid = $_COOKIE["topicid"];
     $c_subjid = $_COOKIE["subjid"];
-
-    echo $subjID;
+    //echo $subjID;
     //echo $sessiontype;
 	
-
 	//the testsessionid
 	//$testsessionid = $topicID.'-'.$testtype.'-'.$studentID;
-
 	// we need php session variable for the $topicID, $testtype, $studentID  
-
     //$sessiontype = $_POST['session'];
-
     $itemseasy = getfieldvalue("topic_config", "itemseasy", "where testtype = '$c_topicid'");
     //echo $itemseasy;
 	$itemsmoderate = getfieldvalue("topic_config", "itemsmoderate", "where testtype = '$c_topicid'");
     //echo $itemsmoderate;
 	$itemsdifficult = getfieldvalue("topic_config", "itemsdifficult", "where testtype = '$c_topicid'");
     //echo $itemsdifficult;
+    $totalitems = $itemsdifficult + $itemseasy + $itemsmoderate;
 
-    $sqlscript = "call generateQuestions('1','$c_topicid','$c_subjid','$c_topicid',$itemseasy,$itemsmoderate,$itemsdifficult)";
+    $sqlscript = "call generateQuestions('1','$c_topicid','$c_subjid','$c_topicid',$itemseasy,$itemsmoderate,$itemsdifficult,0,'$c_topicid',$totalitems)";
+    //we need to supply the student id and session id, please supply it if you can
     ExecuteNoneQuery($sqlscript);   
-
     
-
-
 ?>
 
 
 
 <?php
-
 require('./controllers/connection.php');
 global $con;
-
     if(!isset($a))
     {
         $a=0;
         //unset($_SESSION['score']);
     }
  
-
 if(isset($_POST['next'])) {
         $a=$_POST['a'];
     
@@ -104,10 +93,10 @@ if(isset($_POST['qtopic'])) {
         $topicID = $_POST['qtopic'];
     
 }
+
+
  $sql= "call getQuestion('".$a."','1','$c_topicid','$c_subjid')";
-
  $result = $con->query($sql);
-
     //$sql1="SELECT * FROM questionpart2 ORDER by qid LIMIT 1 OFFSET $a";
     //$result=mysql_query($sql1);
     $num = $result->num_rows;
@@ -132,7 +121,6 @@ if(isset($_POST['qtopic'])) {
     $rational_b = $row["b_rational"];
     $rational_c = $row["c_rational"];
     $rational_d = $row["d_rational"];
-
     echo   "<h3>" .($a + 1).'. '.$questions. "</h3>";
 	echo   "<div>";
    // echo   "<input type='radio' name='question_answers' id='question-1-answers-A' value='a' '".if(isset($_POST['question_answers']) && $_POST['question_answers'] == 'a') echo 'checked="checked"'; ."'/>";
@@ -191,22 +179,17 @@ if(isset($_POST['qtopic'])) {
  
     echo "</form>";
     }
-
-
-
  ?>
 
 <?php
   include ('./controllers/connection.php');
   global $con;
   $myQuery = "SELECT SUM(eq.minutes) AS MIN FROM examquestion eq INNER JOIN studentsession ss ON eq.id = ss.questionid WHERE ss.studentid = 1 AND eq.topicid = '$c_topicid' AND FIND_IN_SET(eq.SUBJID, '$c_subjid')";
-
  $result = $con->query($myQuery);
  $num = $result->num_rows;
   while ($row = mysqli_fetch_array($result)) {
     $setTime = $row['MIN'] * 60;
   }
-
 $timestamp = time();
 $diff = $setTime; //<-Time of countdown in seconds.  ie. 3600 = 1 hr. or 86400 = 1 day.
 //MODIFICATION BELOW THIS LINE IS NOT REQUIRED.
@@ -215,22 +198,17 @@ if(isset($_SESSION['ts'])) {
 	$slice = ($timestamp - $_SESSION['ts']);	
 	$diff = $diff - $slice;
 }
-
 if(!isset($_SESSION['ts']) || $diff > $hld_diff || $diff < 0) {
 	$diff = $hld_diff;
 	$_SESSION['ts'] = $timestamp;
 }
-
 //Below is demonstration of output.  Seconds could be passed to Javascript.
 $diff; //$diff holds seconds less than 3600 (1 hour);
-
 $hours = floor($diff / 3600) . ' : ';
 $diff = $diff % 3600;
 $minutes = floor($diff / 60) . ' : ';
 $diff = $diff % 60;
 $seconds = $diff;
-
-
 ?>
 
 
@@ -256,7 +234,10 @@ $seconds = $diff;
        // echo $_POST['question_id'];
           if(isset($answer))
     {
+               
+             
         $qid = $qid - 1;
+          
        $sql1 = "UPDATE studentsession SET answer='".$_POST['question_answers']."' WHERE id='$qid'"; 
      
       $success = $con->query($sql1);
@@ -293,13 +274,18 @@ $seconds = $diff;
                  echo '<span style="color:red; font-size:18px; line-height:35px; font-family: Calibri;">'.$rational_d.'</span>';
              } else {
              }
-
          }
     
        
      }
     } else {
+          //  echo  $b;
+               $qid = $b - 1;
+               $sql1 = "UPDATE studentsession SET answer='".$_POST['question_answers']."' WHERE id='$b'"; 
               echo 'Thanks for taking the Review Session';
+               $sqlscript = "call insertIntoTestHistory('1')";
+               ExecuteNoneQuery($sqlscript); 
+              
           }
  
     } else {
@@ -310,8 +296,7 @@ $seconds = $diff;
 <script type="text/javascript">
  var hour = <?php echo floor($hours); ?>;
  var min = <?php echo floor($minutes); ?>;
- var sec = <?php echo floor($seconds); ?>
-
+ var sec = <?php echo floor($seconds); ?>;
 function countdown() {
  if(sec <= 0 && min > 0) {
   sec = 59;
@@ -343,4 +328,3 @@ function countdown() {
  <?PHP 
 include_once('ECfooter.php');
 ?>            
-
