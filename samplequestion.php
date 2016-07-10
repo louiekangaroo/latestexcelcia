@@ -10,20 +10,20 @@ $topicID=$_POST['topicid'];
 if (!$_COOKIE["topicid"]){
 setcookie("topicid", $topicID);
 }
-if(!empty($_POST['chkstudy'])) {
-    foreach($_POST['chkstudy'] as $check) {
-            //echoes the value set in the HTML form for each checked checkbox.
-                         //so, if I were to check 1, 3, and 5 it would echo value 1, value 3, value 5.
-                         //in your case, it would echo whatever $row['Report ID'] is equivalent to.
-       $subjID .= $check . ",";
-       
+    if(!empty($_POST['chkstudy'])) {
+        foreach($_POST['chkstudy'] as $check) {
+                //echoes the value set in the HTML form for each checked checkbox.
+                             //so, if I were to check 1, 3, and 5 it would echo value 1, value 3, value 5.
+                             //in your case, it would echo whatever $row['Report ID'] is equivalent to.
+           $subjID .= $check . ",";
+
+        }
+        $subjID =  substr($subjID, 0, -1);
+        if (!$_COOKIE["subjid"]){
+        setcookie("subjid", $subjID);
+        }
+
     }
-    $subjID =  substr($subjID, 0, -1);
-    if (!$_COOKIE["subjid"]){
-    setcookie("subjid", $subjID);
-    }
-    
-}
 ?>
       <div class="container">
          <div class="main-content clear-float">
